@@ -27,6 +27,19 @@ Route::get('facture/{n}', function($n) {
 
 Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
 
+/**
+ * Formulaires
+ */
+
+ // Demande de formulaire
+Route::get('users', 'UsersController@create');
+
+// Envoi de formulaire
+Route::post('users', 'UsersController@store');
+
+/**
+ * Autres exemples de routage
+ */
 Route::get('/json', function () {
     return ['un', 'deux', 'trois'];
 });
