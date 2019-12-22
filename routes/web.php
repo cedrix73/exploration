@@ -19,7 +19,13 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('accueil');
 
-
+Route::get('/test-contact', function () {
+    return new App\Mail\Contact([
+      'nom' => 'Durand',
+      'email' => 'felten.cedric@yahoo.fr',
+      'message' => 'Je voulais vous dire que votre site est magnifique !'
+      ]);
+});
 
 Route::get('facture/{n}', function($n) {
     return view('facture')->withNumero($n);
@@ -28,7 +34,7 @@ Route::get('facture/{n}', function($n) {
 Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
 
 /**
- * Formulaires
+ * Formulaires classiques
  */
 
  // Demande de formulaire
@@ -36,6 +42,13 @@ Route::get('users', 'UsersController@create');
 
 // Envoi de formulaire
 Route::post('users', 'UsersController@store');
+
+/**
+ * Formulaires contact mail
+ */
+Route::get('contact', 'ContactController@create');
+
+Route::post('contact', 'ContactController@store');
 
 /**
  * Autres exemples de routage
