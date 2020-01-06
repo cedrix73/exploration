@@ -6,4 +6,5 @@
 
 @section('contenu')
 C'est l'article n° {{ $numero }}
+  Chemin: {{ $variable }}
 @endsection

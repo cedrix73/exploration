@@ -19,17 +19,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('accueil');
 
-Route::get('/test-contact', function () {
-    return new App\Mail\Contact([
-      'nom' => 'Durand',
-      'email' => 'felten.cedric@yahoo.fr',
-      'message' => 'Je voulais vous dire que votre site est magnifique !'
-      ]);
-});
 
-Route::get('facture/{n}', function($n) {
-    return view('facture')->withNumero($n);
-})->where('n', '[0-9]+');
 
 Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
 
@@ -50,6 +40,23 @@ Route::get('contact', 'ContactController@create');
 
 Route::post('contact', 'ContactController@store');
 
+
+// mail de retour
+Route::get('/test-contact', function () {
+    return new App\Mail\Contact([
+      'nom' => 'Durand',
+      'email' => 'felten.cedric@yahoo.fr',
+      'message' => 'Je voulais vous dire que votre site est magnifique !'
+      ]);
+});
+
+// Envoi photo
+Route::get('photo', 'PhotoController@create');
+Route::post('photo', 'PhotoController@store');
+
+Route::get('facture/{n}', function($n) {
+    return view('facture')->withNumero($n);
+})->where('n', '[0-9]+');
 /**
  * Autres exemples de routage
  */

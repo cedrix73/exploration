@@ -8,6 +8,7 @@ class ArticleController extends Controller
 {
     public function show($n)
     {
-        return view('article')->with('numero', $n);
+        $variable = config('view.paths')[0];
+        return view('article', ['numero' => $n, 'variable' => $variable]);
     }
 }
