@@ -8,12 +8,17 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
+     * Dependency injection:
+     * Link between a class and it's interface
      *
      * @return void
      */
     public function register()
     {
-        //
+        $this->app->bind(
+            'App\Repositories\PhotoRepositoryInterface',
+            'App\Repositories\PhotoRepository'
+        );
     }
 
     /**
@@ -25,4 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+
 }

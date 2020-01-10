@@ -19,9 +19,20 @@ Route::get('/welcome', function () {
     return view('welcome');
 })->name('accueil');
 
+// Réservé aux utilisateurs authentifiés
+Route::middleware('auth')->group(function () {
+    Route::get('comptes', function () {
+
+    });
+
+    Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
+
+});
+Route::get('comptes', function() {
+    // Réservé aux utilisateurs authentifiés
+})->middleware('auth');
 
 
-Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
 
 /**
  * Formulaires classiques
@@ -36,9 +47,9 @@ Route::post('users', 'UsersController@store');
 /**
  * Formulaires contact mail
  */
-Route::get('contact', 'ContactController@create');
+Route::get('mail', 'ContactController@create');
 
-Route::post('contact', 'ContactController@store');
+Route::post('mail', 'ContactController@store');
 
 
 // mail de retour
@@ -57,6 +68,15 @@ Route::post('photo', 'PhotoController@store');
 Route::get('facture/{n}', function($n) {
     return view('facture')->withNumero($n);
 })->where('n', '[0-9]+');
+
+/**
+ * Formulaires contacts
+ */
+
+Route::get('contact', 'ContactsController@create')->name('contact.create');
+Route::post('contact', 'ContactsController@store')->name('contact.store');
+
+
 /**
  * Autres exemples de routage
  */
@@ -71,3 +91,9 @@ Route::get('test', function () {
 Route::get('{n}', function($n=1) {
     return 'Je suis la page ' . $n . ', page ' . $_SERVER['PHP_SELF'] . ' !';
 })->where('n', '[1-3]');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
