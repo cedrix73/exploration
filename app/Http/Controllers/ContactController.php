@@ -16,8 +16,8 @@ class ContactController extends Controller
 
     public function store(ContactRequest $request)
     {
-        //from(getenv('MAIL_USERNAME'))->
-        Mail::to('felten.cedric73@monsite.com')->queue(new Contact($request->except('_token')));
+        Mail::to('felten.cedric73@gmail.com')->send(new Contact($request->except('_token')));
+        //Mail::to('felten.cedric73@gmail.com')->queue(new Contact($request->except('_token')));
         return view('confirm');
     }
 }

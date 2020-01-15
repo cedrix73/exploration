@@ -24,14 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('comptes', function () {
 
     });
-
     Route::get('article/{n}', 'ArticleController@show')->where('n', '[0-9]+');
 
 });
-Route::get('comptes', function() {
-    // Réservé aux utilisateurs authentifiés
-})->middleware('auth');
-
 
 
 /**
