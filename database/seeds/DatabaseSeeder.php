@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        factory(App\Film::class, 50)->create();
+
     }
 }

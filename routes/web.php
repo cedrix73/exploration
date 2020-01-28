@@ -13,6 +13,8 @@
 
 use App\Http\Controllers\ArticleController;
 
+
+
 Route::get('/', 'WelcomeController@index');
 
 Route::get('/welcome', function () {
@@ -20,6 +22,8 @@ Route::get('/welcome', function () {
 })->name('accueil');
 
 // Réservé aux utilisateurs authentifiés
+Auth::routes(['verify' => true]);
+
 Route::middleware('auth')->group(function () {
     Route::get('comptes', function () {
 
@@ -28,6 +32,15 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::get('protege', function () {
+    return 'affichage de la route protégé';
+})->middleware('verified');
+
+/**
+ * Films
+ */
+
+Route::resource('films', 'FilmController');
 
 /**
  * Formulaires classiques
