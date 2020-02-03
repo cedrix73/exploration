@@ -41,6 +41,8 @@ Route::get('protege', function () {
  */
 
 Route::resource('films', 'FilmController');
+Route::delete('films/force/{film}', 'FilmController@forceDestroy')->name('films.force.destroy');
+Route::put('films/restore/{film}', 'FilmController@restore')->name('films.restore');
 
 /**
  * Formulaires classiques
