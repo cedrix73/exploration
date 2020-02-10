@@ -39,10 +39,14 @@ Route::get('protege', function () {
 /**
  * Films
  */
+// Vue index par défaut
 
-Route::resource('films', 'FilmController');
+// CRUD corbeille
 Route::delete('films/force/{film}', 'FilmController@forceDestroy')->name('films.force.destroy');
 Route::put('films/restore/{film}', 'FilmController@restore')->name('films.restore');
+// Catégories de films
+Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
+Route::resource('films', 'FilmController');
 
 /**
  * Formulaires classiques

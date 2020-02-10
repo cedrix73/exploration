@@ -7,7 +7,8 @@
         align-items: center;
         padding: 0.4em;
     }
-    .is-info {
+
+    select, .is-info {
         margin: 0.3em;
     }
 </style>
@@ -20,8 +21,16 @@
 </div>
 @endif
     <div class="card">
-        <header class="card-header">
-            <p class="card-header-title">Films</p>
+        <header class="card-header" justify-content="flex-start">
+            <p class="card-header-title">Films {{ $slug }}</p>
+            <div class="select">
+                <select onchange="window.location.href = this.value">
+                    <option value="{{ route('films.index') }}" @unless($slug) selected @endunless>Toutes catégories</option>
+                    @foreach($categories as $category)
+                        <option value="{{ route('films.category', $category->slug) }}" {{ $slug == $category->slug ? 'selected' : '' }}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
             <a class="button is-info" href="{{ route('films.create') }}">Créer un film</a>
         </header>
         <div class="card-content">
@@ -33,6 +42,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th>Catégorie</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,7 +57,7 @@
                                         <button class="button is-primary" type="submit">Restaurer</button>
                                     </form>
                                 @else
-                                    <td><a class="button is-primary" href="{{ route('films.show', $film) }}">Voir</a></td>
+                                    <a class="button is-primary" href="{{ route('films.show', $film) }}">Voir</a>
                                 @endif
                                 </td>
 
@@ -63,6 +73,9 @@
                                         @method('DELETE')
                                         <button class="button is-danger" type="submit">Supprimer</button>
                                     </form>
+                                </td>
+                                <td>
+                                    {{ $film->category_id }}
                                 </td>
                             </tr>
                         @endforeach

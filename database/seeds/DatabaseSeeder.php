@@ -1,5 +1,6 @@
 <?php
 
+use App\Film;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,7 +20,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        factory(App\Film::class, 50)->create();
+       // factory(App\Category::class, 10)->create();
+       // factory(App\Film::class, 50)->create();
+
+        factory(App\Category::class, 10)->create()->each(function($category){
+            $i = rand(2, 8);
+            while(--$i){
+                $category->films()->save(factory(App\Film::class)->make());
+            }
+        });
 
     }
 }
