@@ -9,6 +9,12 @@
             <div class="content">
                 <p>Année de sortie : {{ $film->year }}</p>
                 <p>Catégorie : {{ $category }}</p>
+                <p>Acteurs :</p>
+                <ul>
+                    @foreach ($film->actors as $actor)
+                        <li>{{ $actor->first_name }}&nbsp;{{ $actor->name }}</li>
+                    @endforeach
+                </ul>
                 <hr>
                 <p>{{ $film->description }}</p>
             </div>

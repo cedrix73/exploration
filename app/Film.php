@@ -13,7 +13,17 @@ class Film extends Model
     /**
      * Relation ->films n:1
      */
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Relation ->actors n:n
+     */
+     public function actors()
+     {
+
+        return $this->belongsToMany(Actor::class);
+     }
 }

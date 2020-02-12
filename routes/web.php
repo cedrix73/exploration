@@ -42,8 +42,8 @@ Route::get('protege', function () {
 // Vue index par défaut
 
 // CRUD corbeille
-Route::delete('films/force/{film}', 'FilmController@forceDestroy')->name('films.force.destroy');
-Route::put('films/restore/{film}', 'FilmController@restore')->name('films.restore');
+Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
+Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
 // Catégories de films
 Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
 Route::resource('films', 'FilmController');

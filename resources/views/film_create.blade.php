@@ -41,6 +41,20 @@
                         @enderror
                     </div>
                     <div class="field">
+                        <label class="label">Acteurs</label>
+                        <div class="select is-multiple">
+                            <select name="actors[]" multiple>
+                                @foreach ($actors as $actor)
+                                    <option value="{{ $actor->id}}" {{ in_array($actor->id, old('actors') ?: []) ? 'selected' : '' }}
+                                         id = "{{ $actor->id}}">{{ $actor->first_name }}&nbsp;{{ $actor->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('category_id')
+                            <p class="help is-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="field">
                         <label class="label">Description</label>
                         <div class="control">
                             <textarea class="textarea" name="description" placeholder="Description du film">{{ old('description') }}</textarea>

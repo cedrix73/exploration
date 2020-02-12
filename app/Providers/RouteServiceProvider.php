@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use App\Film;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -16,17 +17,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
-    /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-
-        parent::boot();
-    }
 
     /**
      * Define the routes for the application.
@@ -69,5 +59,19 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * Function boot
+     * Lie intrinsèquement les acteurs aux films dans les routes:
+     * Plus besoin deles charger en BD dans le controlleur
+     * @return void
+     */
+    public function boot()
+    {
+        parent::boot();
+        Route::bind('film', function ($idsActeur) {
+            return Film::with('actors')->find($idsActeur) ?? abort(404);
+        });
     }
 }

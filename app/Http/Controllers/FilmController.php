@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Film;
 use App\Category;
+use App\Actor;
 use App\Http\Requests\FilmRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +37,8 @@ class FilmController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('film_create', compact('categories'));
+        $actors = Actor::all();
+        return view('film_create', compact('categories', 'actors'));
     }
 
     /**
@@ -60,6 +62,9 @@ class FilmController extends Controller
     public function show(Film $film)
     {
         $category = $film->category->name;
+        // On ne va plus charger les acteurs en BD mais les lier
+        // implicitement au films avec la méthode RouteServiceProvider:boot
+        //$film->with('actors')->get();
         return view('film_show', compact('film', 'category'));
     }
 
