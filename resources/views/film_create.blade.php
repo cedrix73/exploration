@@ -50,7 +50,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        @error('category_id')
+                        @error('actor_id')
                             <p class="help is-danger">{{ $message }}</p>
                         @enderror
                     </div>

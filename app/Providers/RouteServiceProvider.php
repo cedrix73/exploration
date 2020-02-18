@@ -64,7 +64,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Function boot
      * Lie intrinsèquement les acteurs aux films dans les routes:
-     * Plus besoin deles charger en BD dans le controlleur
+     * Plus besoin de les charger en BD dans le controlleur
      * @return void
      */
     public function boot()
