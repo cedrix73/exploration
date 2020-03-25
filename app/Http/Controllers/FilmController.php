@@ -75,7 +75,7 @@ class FilmController extends Controller
         // On ne devrait plus charger les acteurs en BD mais les lier
         // implicitement au films avec la méthode RouteServiceProvider:boot
         //$film->with('actors')->get();
-        // mais comme c'est de la merde ça ne marche pas.
+        // mais ça ne marche pas.
         return view('film_show', compact('film'));
     }
 

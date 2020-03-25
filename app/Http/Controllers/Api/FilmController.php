@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Film as FilmResrource;
 use Illuminate\Http\Request;
 use App\Film;
 
@@ -39,7 +40,7 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
-        return $film;
+        return new FilmResrource($film);
     }
 
 
