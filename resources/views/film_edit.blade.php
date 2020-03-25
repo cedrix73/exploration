@@ -32,8 +32,8 @@
                         <label class="label">Catégorie</label>
                         <div class="select">
                             <select name="category_id">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id}}" id = "{{ $category->id}}" {{ $category->id == $film->category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @foreach ($categories as $catList)
+                                    <option value="{{ $catList->id }}" {{ ($catList->id == $film->category->id) ? 'selected' : '' }}>{{ $catList->name }}</option>
                                 @endforeach
                             </select>
                         </div>

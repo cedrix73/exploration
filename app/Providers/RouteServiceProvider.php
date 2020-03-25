@@ -70,8 +70,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        Route::bind('film', function ($idsActeur) {
-            return Film::with('actors')->find($idsActeur) ?? abort(404);
+        Route::bind('film', function ($value) {
+            return Film::with('category', 'actors')->find($value) ?? abort(404);
         });
     }
 }

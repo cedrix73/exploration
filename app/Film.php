@@ -11,6 +11,11 @@ class Film extends Model
     protected $fillable = ['title', 'year', 'description', 'category_id'];
 
     /**
+     * Masque les colonnes de sortie jSon non désirées lors de l'appel à l'API
+     */
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
+    /**
      * Relation ->films n:1
      */
     public function category()

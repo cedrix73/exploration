@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use App\Film;
 use App\Category;
 use App\Actor;
+use App\Providers\AppServiceProvider;
 use App\Http\Requests\FilmRequest;
-use Illuminate\Support\Facades\DB;
+
 
 class FilmController extends Controller
 {
@@ -18,15 +21,21 @@ class FilmController extends Controller
      */
     public function index($slug = null)
     {
-        $query = $slug ? Category::whereSlug($slug)->firstOrFail()->films() : Film::query();
+        $model = null;
+        if($slug) {
+            if(Route::currentRouteName() == 'films.category') {
+                $model = new Category;
+            } else {
+                $model = new Actor;
+            }
+        }
+        $query = $model ? $model->whereSlug($slug)->firstOrFail()->films() : Film::query();
         $films = $query->withTrashed()->oldest('title')->paginate(5);
-        /*$films = DB::table('films')
-            ->leftJoin('categories', 'films.category_id', '=', 'categories.id')
-            ->oldest('title')
-            ->get();
-            */
+
+        // Catégories et acteurs Chargé automatiquement avec AppServiceProvider:Boot
+        $actors = Actor::all();
         $categories = Category::all();
-        return view('film_index', compact('films', 'categories', 'slug'));
+        return view('film_index', compact('films', 'categories', 'actors', 'slug'));
     }
 
     /**
@@ -62,11 +71,12 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
-        $category = $film->category->name;
-        // On ne va plus charger les acteurs en BD mais les lier
+
+        // On ne devrait plus charger les acteurs en BD mais les lier
         // implicitement au films avec la méthode RouteServiceProvider:boot
         //$film->with('actors')->get();
-        return view('film_show', compact('film', 'category'));
+        // mais comme c'est de la merde ça ne marche pas.
+        return view('film_show', compact('film'));
     }
 
     /**

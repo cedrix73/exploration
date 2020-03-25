@@ -5,15 +5,11 @@
 use App\Actor;
 use Faker\Generator as Faker;
 
-$factory->define(Actor::class, function (Faker $faker) {
-    return [
-        //
-    ];
-});
+
 
 $factory->define(Actor::class, function (Faker $faker) {
-    $first_name = $faker->word();
-    $name = $faker->word();
+    $first_name = $faker->firstName();
+    $name = $faker->lastName;
     return [
         'first_name' => $first_name,
         'name' => $name,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Film;
+use App\Category;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -50,8 +51,30 @@ class DatabaseSeeder extends Seeder
      */
     public function fillCategoriesFilms()
     {
-        // factory(App\Category::class, 10)->create();
-       // factory(App\Film::class, 50)->create();
+        $categories = [
+            'Comédie',
+            'Drame',
+            'Action',
+            'Fantastique',
+            'Horreur',
+            'Animation',
+            'Espionnage',
+            'Guerre',
+            'Policier',
+            'Pornographique',
+        ];
+
+        foreach($categories as $category) {
+            $objCat = Category::create(['name' => $category, 'slug' => Str::slug($category)]);
+            $i = rand($this->_nbFilmsMinByCategory, $this->_nbFilmsMaxByCategory);
+            while(--$i){
+                $this->_nbFilmsMax++;
+                $objCat->films()->save(factory(App\Film::class)->make());
+            }
+        }
+
+        // Desactivé: Génération aléatoire de 'éléments de catégories
+        /*
         factory(App\Category::class, $this->_nbCategories)->create()->each(function($category) {
             $i = rand($this->_nbFilmsMinByCategory, $this->_nbFilmsMaxByCategory);
             while(--$i){
@@ -59,10 +82,12 @@ class DatabaseSeeder extends Seeder
                 $category->films()->save(factory(App\Film::class)->make());
             }
         });
+        */
     }
 
     /**
      * Function fillActors
+     * On utilisera une factory pour creer les noms des acteurs
      * Fill actors table with 50 actors (n) and dispatch them to all films (n)
      *
      * @return void

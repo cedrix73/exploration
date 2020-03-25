@@ -8,7 +8,7 @@
         <div class="card-content">
             <div class="content">
                 <p>Année de sortie : {{ $film->year }}</p>
-                <p>Catégorie : {{ $category }}</p>
+                <p>Catégorie : {{ $film->category->name }}</p>
                 <p>Acteurs :</p>
                 <ul>
                     @foreach ($film->actors as $actor)

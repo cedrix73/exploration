@@ -31,6 +31,16 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="select">
+                <select onchange="window.location.href = this.value">
+                    <option value="{{ route('films.index') }}" @unless($slug) selected @endunless>Tous les acteurs</option>
+                    @foreach($actors as $actor)
+                        <option value="{{ route('films.actor', $actor->slug) }}" {{ $slug == $actor->slug ? 'selected' : '' }}>{{ $actor->first_name }}&nbsp;{{ $actor->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <a class="button is-info" href="{{ route('films.create') }}">Créer un film</a>
         </header>
         <div class="card-content">
