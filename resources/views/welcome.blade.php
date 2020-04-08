@@ -25,9 +25,10 @@
             }
 
             .flex-center {
-                align-items: center;
+                align-content: center;
                 display: flex;
                 justify-content: center;
+                flex-wrap: wrap;
             }
 
             .position-ref {
@@ -42,6 +43,7 @@
 
             .content {
                 text-align: center;
+
             }
 
             .title {
@@ -93,6 +95,18 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://vapor.laravel.com">Vapor</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
+                </div>
+            </div>
+            <div class="content">
+                <div class="title m-b-md">
+                    Projets
+                </div>
+
+                <div class="links">
+                    <a href="{{ url('users') }}">Exemple formulaire</a>
+                    <a href="{{ route('films.index') }}">Exemple des Films</a>
+                    <a href="{{ route('contact.create') }}">Validation: Contactez-moi avec https://mailtrap.io</a>
+
                 </div>
             </div>
         </div>

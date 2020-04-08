@@ -62,9 +62,12 @@ Route::post('users', 'UsersController@store');
 /**
  * Formulaires contact mail
  */
-Route::get('mail', 'ContactController@create');
+/**
+ * Formulaires contacts
+ */
 
-Route::post('mail', 'ContactController@store');
+Route::get('contact', 'ContactsController@create')->name('contact.create');
+Route::post('contact', 'ContactsController@store')->name('contact.store');
 
 
 // mail de retour
@@ -84,12 +87,7 @@ Route::get('facture/{n}', function($n) {
     return view('facture')->withNumero($n);
 })->where('n', '[0-9]+');
 
-/**
- * Formulaires contacts
- */
 
-Route::get('contact', 'ContactsController@create')->name('contact.create');
-Route::post('contact', 'ContactsController@store')->name('contact.store');
 
 
 /**
