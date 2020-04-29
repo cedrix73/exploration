@@ -21,27 +21,13 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
-        $this->fillUsers();
         $this->fillCategoriesFilms();
         $this->fillActors();
+        $this->call(UserRoleSeeder::class);
 
     }
 
-    /**
-     * Function fillUsers
-     * Fill user table
-     *
-     * @return void
-     */
-    public function fillUsers(){
-        App\User::create(
-            [
-                'name' => 'Dupont',
-                'email' => 'dupont@la.fr',
-                'password' => bcrypt('pass'),
-            ]
-        );
-    }
+
 
     /**
      * Function fillCategoriesFilms
@@ -95,7 +81,8 @@ class DatabaseSeeder extends Seeder
     public function fillActors()
     {
         $ids = range(1, $this->_nbFilmsMax);
-        factory(App\Actor::class, $this->_nbActors)->create()->each(function($actor) use($ids){
+        factory(App\Actor::class, $this->_nbActors)->create()
+        ->each(function($actor) use($ids){
             shuffle($ids);
             $actor->films()->attach(array_slice($ids, 0, rand(1, $this->_nbActorsMaxByFilm)));
         });

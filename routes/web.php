@@ -36,19 +36,23 @@ Route::get('protege', function () {
     return 'affichage de la route protégé';
 })->middleware('verified');
 
+
+
+
 /**
  * Films
  */
 // Vue index par défaut
 
 // CRUD corbeille
-Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
-Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
-// Catégories de films
-Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
-Route::get('actor/{slug}/films', 'FilmController@index')->name('films.actor');
-Route::resource('films', 'FilmController');
-
+Route::group(['middleware' => 'role:films-section'], function() {
+    Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
+    Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
+    // Catégories de films
+    Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
+    Route::get('actor/{slug}/films', 'FilmController@index')->name('films.actor');
+    Route::resource('films', 'FilmController');
+});
 /**
  * Formulaires classiques
  */
@@ -65,9 +69,14 @@ Route::post('users', 'UsersController@store');
 /**
  * Formulaires contacts
  */
+Route::group(['middleware' => 'role:contacts-section'], function() {
+    Route::get('contact', 'ContactsController@create')->name('contact.create');
+    Route::post('contact', 'ContactsController@store')->name('contact.store');
 
-Route::get('contact', 'ContactsController@create')->name('contact.create');
-Route::post('contact', 'ContactsController@store')->name('contact.store');
+    // Envoi photo
+    Route::get('photo', 'PhotoController@create');
+    Route::post('photo', 'PhotoController@store');
+});
 
 
 // mail de retour
@@ -77,12 +86,10 @@ Route::get('/test-contact', function () {
       'email' => 'felten.cedric@yahoo.fr',
       'message' => 'Je voulais vous dire que votre site est magnifique !'
       ]);
+
+
+
 });
-
-// Envoi photo
-Route::get('photo', 'PhotoController@create');
-Route::post('photo', 'PhotoController@store');
-
 Route::get('facture/{n}', function($n) {
     return view('facture')->withNumero($n);
 })->where('n', '[0-9]+');

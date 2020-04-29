@@ -1,10 +1,10 @@
 <?php
 
-     namespace App\Repositories;
+namespace App\Repositories;
 
-     use Illuminate\Http\UploadedFile;
+use Illuminate\Http\UploadedFile;
 
-     interface PhotoRepositoryInterface
-     {
-       public function save(UploadedFile $image);
-     }
+interface PhotoRepositoryInterface
+{
+public function save(UploadedFile $image);
+}
