@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Repositories\Role;
+namespace App\Repositories\Permission;
 
 
-interface RoleRepositoryInterface
+interface PermissionRepositoryInterface
+
 {
+    public function check($roleAsked);
+
     public function setCode($code);
 
     public function getCode();

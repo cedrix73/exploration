@@ -44,8 +44,9 @@ Route::get('protege', function () {
  */
 // Vue index par défaut
 
-// CRUD corbeille
+
 Route::group(['middleware' => 'role:films-section'], function() {
+    // CRUD corbeille
     Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
     Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
     // Catégories de films

@@ -1,32 +1,38 @@
 <?php
 
-namespace App\Repositories\Role;
-
-use App\Role;
+namespace App\Repositories\Permission;
 
 
+use App\User;
 
 
-class RoleRepository implements RoleRepositoryInterface
+
+
+class PermissionRepository implements PermissionRepositoryInterface
 {
 
-    private $_role;
 
     private $_code;
 
-    public function __construct(Role $role)
+    public function check($roleAsked)
     {
-        $this->_role = $role;
+        $code = null;
+        foreach (session(['roles']) as $role) {
+            if ($role.equalTo($roleAsked)) {
+                $code = $role->pivot->code;
+            }
+        }
+        if($code!==null){
+            $this->_code = $code;
+        }
     }
 
     Private Const VIEW = 1;
     Private Const INSERT = 2;
     Private Const UPDATE = 4;
     Private Const DELETE = 8;
+    Private Const ADMIN = 16;
 
-    Const ADMIN = 16;
-
-    private $_code;
 
     public function setCode($code) {
         $this->_code = $code;
@@ -59,7 +65,10 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     public function setView() {
-        $this->_code += $this->VIEW;
+        if (($this->VIEW & $this->_code) != $this->VIEW){
+            $this->_code += $this->VIEW;
+        }
+
     }
 
 	/* Retourne vrai si le rôle autorise l'insertion de clients */
@@ -72,7 +81,10 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     public function setInsert() {
-        $this->_code += $this->INSERT;
+        if (($this->INSERT & $this->_code) != $this->INSERT) {
+            $this->_code += $this->INSERT;
+        }
+
     }
 
 
@@ -87,11 +99,13 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     public function setUpdate() {
-        $this->_code += $this->UPDATE;
+        if (($this->UPDATE & $this->_code) != $this->UPDATE) {
+            $this->_code += $this->UPDATE;
+        }
     }
 
 	/* Retourne vrai si le rôle autorise la suppression de clients */
-	public function isDelete() {
+    public function isDelete() {
 		if (($this->DELETE & $this->_code) == $this->DELETE) {
 			return true;
 		} else {
@@ -100,10 +114,12 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     public function setDelete() {
-        $this->_code += $this->DELETE;
+        if (($this->DELETE & $this->_code) != $this->DELETE) {
+            $this->_code += $this->DELETE;
+        }
     }
 
-    public function encode($tabVal){
+    public function encode($tabVal) {
         /* Codage des droits sur 3 * 4 bits + 1 (que l'on écrit en base 10)
             * Delete / Update / Insert / Select
                 Matériel	Réservation     Client
@@ -132,6 +148,8 @@ class RoleRepository implements RoleRepositoryInterface
         }
         $this->code = $rol;
     }
+
+
 
 
 }

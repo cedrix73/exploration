@@ -44,12 +44,26 @@ trait HasRolesAndPermissions
      */
     public function getPermissions($roleAsked) {
         $code=null;
-        foreach ($this->roles->withPivot('code') as $role) {
+        foreach ($this->roles as $role) {
             if ($role->contains('slug', $roleAsked)) {
                 $code = $role->pivot->code;
             }
         }
         return $code;
+    }
+
+    /**
+     * @name        getAllRolesAndPermission
+     * @description return array[role slug] = code
+     */
+    public function setRolesAndPermissionSession() {
+        $rolesArray =array();
+        foreach ($this->roles as $role) {
+            $code = $role->pivot->code;
+            $rolesArray[$role->slug] = $code;
+        }
+        session(['roles' => $rolesArray]);
+
     }
 
     public function getRole($roleAsked) {

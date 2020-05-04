@@ -1,13 +1,13 @@
-<?php namespace App\Repositories\Role;
+<?php namespace App\Repositories\Permission;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
-Class RoleServiceProvider extends ServiceProvider {
+Class PermissionServiceProvider extends ServiceProvider {
     public function register() {
         $this->app->bind(
-            'App\Repositories\Role\RoleRepositoryInterface',
-            'App\Repositories\Role\RoleRepository'
+            'App\Repositories\Permission\PermissionRepositoryInterface',
+            'App\Repositories\Permission\PermissionRepository'
         );
     }
 
@@ -20,6 +20,8 @@ Class RoleServiceProvider extends ServiceProvider {
         Blade::directive('endrole', function ($role){
             return "<?php endif; ?>";
         });
+
+
     }
 
 
