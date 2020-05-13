@@ -50,7 +50,7 @@ class UserRoleSeeder extends Seeder
         $admin->password = bcrypt('cedrix');
         $admin->save();
         $admin->giveRole('contacts-section', 8);
-        $admin->giveRole('films-section', 8);
+        $admin->giveRole('films-section', 15);
 
 
 
@@ -76,14 +76,6 @@ class UserRoleSeeder extends Seeder
         $contactManager->save();
         $contactManager->giveRole('contacts-section', 3);
 
-
-        $user = App\User::find(4);
-        dd($user->hasRole('films-section')); // will return true
-        dd($user->hasRole('contacts-section'));// will return false
-
-        $user = App\User::find(5);
-        dd($user->hasRole('films-section')); // will return false
-        dd($user->hasRole('contacts-section'));// will return true
 
 
 

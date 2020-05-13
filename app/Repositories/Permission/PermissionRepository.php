@@ -4,34 +4,36 @@ namespace App\Repositories\Permission;
 
 
 use App\User;
+use Session;
 
 
 
 
 class PermissionRepository implements PermissionRepositoryInterface
 {
+    private const VIEW = 1;
+    private const INSERT = 2;
+    private const UPDATE = 4;
+    private const DELETE = 8;
+    private const ADMIN = 16;
 
 
     private $_code;
 
     public function check($roleAsked)
     {
-        $code = null;
-        foreach (session(['roles']) as $role) {
-            if ($role.equalTo($roleAsked)) {
-                $code = $role->pivot->code;
+        $code=null;
+        if (Session::has('roles')) {
+            foreach (session('roles') as $role => $value) {
+                if ($role===$roleAsked) {
+                    $code=$value;
+                }
             }
         }
-        if($code!==null){
-            $this->_code = $code;
-        }
+        return $code;
     }
 
-    Private Const VIEW = 1;
-    Private Const INSERT = 2;
-    Private Const UPDATE = 4;
-    Private Const DELETE = 8;
-    Private Const ADMIN = 16;
+
 
 
     public function setCode($code) {
@@ -43,8 +45,9 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
 
-    public function isAdmin() {
-        if (($this->ADMIN & $this->_code) == $this->ADMIN) {
+    public function isAdmin($roleAsked) {
+        $code=$this->check($roleAsked);
+        if ((self::ADMIN & $code) == self::ADMIN) {
             return true;
 		} else {
 			return false;
@@ -52,12 +55,18 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
     public function setAdmin() {
-        $this->_code = $this->ADMIN;
+        $this->_code = self::ADMIN;
     }
 
-	/* Retourne vrai si le rôle autorise la sélection sur les clients */
-	public function isView() {
-		if (($this->VIEW & $this->_code) == $this->VIEW) {
+	/**
+     * @name        isView
+     * @description check if user has own the select right for the asked role
+     * @parameter   string $roleAsked
+     * @return      boolean
+     */
+	public function isView($roleAsked) {
+        $code=$this->check($roleAsked);
+		if ((self::VIEW & $code) == self::VIEW) {
 			return true;
 		} else {
 			return false;
@@ -65,15 +74,21 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
     public function setView() {
-        if (($this->VIEW & $this->_code) != $this->VIEW){
-            $this->_code += $this->VIEW;
+        if ((self::VIEW & $this->_code) != self::VIEW) {
+            $this->_code += self::VIEW;
         }
 
     }
 
-	/* Retourne vrai si le rôle autorise l'insertion de clients */
-	public function isInsert() {
-		if (($this->INSERT & $this->_code) == $this->INSERT) {
+	/**
+     * @name        isInsert
+     * @description check if user has own the create right for the asked role
+     * @parameter   string $roleAsked
+     * @return      boolean
+     */
+	public function isInsert($roleAsked) {
+        $code=$this->check($roleAsked);
+		if ((self::INSERT & $code) == self::INSERT) {
 			return true;
 		} else {
 			return false;
@@ -81,32 +96,44 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
     public function setInsert() {
-        if (($this->INSERT & $this->_code) != $this->INSERT) {
-            $this->_code += $this->INSERT;
+        if ((self::INSERT & $this->_code) != self::INSERT) {
+            $this->_code += self::INSERT;
         }
 
     }
 
 
 
-	/* Retourne vrai si le rôle autorise la mise à jour de clients */
-    public function isUpdate() {
-        if (($this->UPDATE & $this->_code) == $this->UPDATE) {
-			return true;
+	/**
+     * @name        isUpdate
+     * @description check if user has own the update right for the asked role
+     * @parameter   string $roleAsked
+     * @return      boolean
+     */
+    public function isUpdate($roleAsked) {
+        $code=$this->check($roleAsked);
+        if ((self::UPDATE & $code) == self::UPDATE) {
+			return TRUE;
 		} else {
-			return false;
+			return FALSE;
 		}
     }
 
     public function setUpdate() {
-        if (($this->UPDATE & $this->_code) != $this->UPDATE) {
-            $this->_code += $this->UPDATE;
+        if ((self::UPDATE & $this->_code) != self::UPDATE) {
+            $this->_code += self::UPDATE;
         }
     }
 
-	/* Retourne vrai si le rôle autorise la suppression de clients */
-    public function isDelete() {
-		if (($this->DELETE & $this->_code) == $this->DELETE) {
+	/**
+     * @name        isDelete
+     * @description check if user has own the delete right for the asked role
+     * @parameter   string $roleAsked
+     * @return      boolean
+     */
+    public function isDelete($roleAsked) {
+        $code=$this->check($roleAsked);
+		if ((self::DELETE & $code) == self::DELETE) {
 			return true;
 		} else {
 			return false;
@@ -114,8 +141,8 @@ class PermissionRepository implements PermissionRepositoryInterface
     }
 
     public function setDelete() {
-        if (($this->DELETE & $this->_code) != $this->DELETE) {
-            $this->_code += $this->DELETE;
+        if ((self::DELETE & $this->_code) != self::DELETE) {
+            $this->_code += self::DELETE;
         }
     }
 

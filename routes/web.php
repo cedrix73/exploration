@@ -49,11 +49,20 @@ Route::group(['middleware' => 'role:films-section'], function() {
     // CRUD corbeille
     Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
     Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
-    // Catégories de films
-    Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
-    Route::get('actor/{slug}/films', 'FilmController@index')->name('films.actor');
-    Route::resource('films', 'FilmController');
 });
+// Catégories de films
+Route::get('category/{slug}/films', 'FilmController@index')->name('films.category');
+Route::get('actor/{slug}/films', 'FilmController@index')->name('films.actor');
+
+/*
+Route::get('films', function(){
+    Artisan::call('view:clear');
+}) ;
+*/
+
+Route::resource('films', 'FilmController');
+
+
 /**
  * Formulaires classiques
  */

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Permission\PermissionRepositoryInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
@@ -32,14 +33,17 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+    protected $permission;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PermissionRepositoryInterface $permission)
     {
         $this->middleware('guest')->except('logout');
+        $this->permission = $permission;
     }
 
     /**
@@ -53,6 +57,9 @@ class LoginController extends Controller
     protected function authenticated(Request $request, User $user)
     {
         $user->setRolesAndPermissionSession();
+        // $code=$this->permission->check('films-section');
+        // dd($this->permission->isInsert());
+
     }
 
 

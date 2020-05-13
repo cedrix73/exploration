@@ -3,6 +3,8 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
+use App\Repositories\Permission\PermissionRepositoryInterface;
+
 Class PermissionServiceProvider extends ServiceProvider {
     public function register() {
         $this->app->bind(
@@ -11,17 +13,28 @@ Class PermissionServiceProvider extends ServiceProvider {
         );
     }
 
-    public function boot()
+    public function boot(PermissionRepositoryInterface $permission)
     {
-        Blade::directive('role', function ($role){
-            return "<?php if(auth()->check() && auth()->user()->hasRole({$role})) :";
+        Blade::directive('reserved', function ($rolePermission) use ($permission){
+            $feedback = false;
+            $permissionName = false;
+            $rolePermission = str_replace("'", '', $rolePermission);
+            list($roleName, $permissionName) = explode(': ', $rolePermission);
+            $roleName = trim($roleName);
+            $permissionName = trim($permissionName);
+
+            if(method_exists($permission, $permissionName)){
+                $feedback = call_user_func(array($permission, $permissionName), $roleName);
+            }
+
+           $feedback = boolval($feedback);
+
+            return "<?php if(Auth::check() && '$feedback') : ?>";
         });
 
-        Blade::directive('endrole', function ($role){
+        Blade::directive('endreserved', function ($rolePermission){
             return "<?php endif; ?>";
         });
-
-
     }
 
 

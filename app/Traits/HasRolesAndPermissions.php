@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Role;
 use App\Permission;
 use Illuminate\Support\Str;
+use Session;
 
 trait HasRolesAndPermissions
 {

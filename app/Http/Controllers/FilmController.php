@@ -10,10 +10,28 @@ use App\Category;
 use App\Actor;
 use App\Providers\AppServiceProvider;
 use App\Http\Requests\FilmRequest;
+use Illuminate\Support\Facades\Auth;
+use Session;
+
+use App\Repositories\Permission\PermissionRepositoryInterface;
 
 
 class FilmController extends Controller
 {
+    private $_roleName;
+    protected $permission;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(PermissionRepositoryInterface $permission)
+    {
+        $this->_roleName = 'films-section';
+        $this->permission = $permission;
+        $code=$this->permission->check($this->_roleName);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -45,9 +63,14 @@ class FilmController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $actors = Actor::all();
-        return view('film_create', compact('categories', 'actors'));
+        if(!$this->permission->isInsert($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en création.');
+        }else{
+            $categories = Category::all();
+            $actors = Actor::all();
+            return view('film_create', compact('categories', 'actors'));
+        }
     }
 
     /**
@@ -58,9 +81,15 @@ class FilmController extends Controller
      */
     public function store(FilmRequest $filmRequest)
     {
-        $storedFilm = Film::create($filmRequest->all());
-        $storedFilm->actors()->attach($filmRequest->actors);
-        return redirect()->route('films.index')->with('info', 'Le film a bien été créé');
+        $this->permission->check($this->_roleName);
+        if(!$this->permission->isInsert()){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en création.');
+        }else{
+            $storedFilm = Film::create($filmRequest->all());
+            $storedFilm->actors()->attach($filmRequest->actors);
+            return redirect()->route('films.index')->with('info', 'Le film a bien été créé');
+        }
     }
 
     /**
@@ -71,7 +100,6 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
-
         // On ne devrait plus charger les acteurs en BD mais les lier
         // implicitement au films avec la méthode RouteServiceProvider:boot
         //$film->with('actors')->get();
@@ -87,9 +115,18 @@ class FilmController extends Controller
      */
     public function edit(Film $film)
     {
-        $actors = Actor::all();
-        $categories = Category::all();
-        return view('film_edit', compact('film', 'categories', 'actors'));
+        if(!$this->permission->isUpdate($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en modification.');
+        }else{
+            $actors = Actor::all();
+            $categories = Category::all();
+            return view('film_edit', compact('film', 'categories', 'actors'));
+        }
+
+
+
+
     }
 
     /**
@@ -101,9 +138,14 @@ class FilmController extends Controller
      */
     public function update(FilmRequest $filmRequest, Film $film)
     {
-        $film->update($filmRequest->all());
-        $film->actors()->sync($filmRequest->actors);
-        return redirect()->route('films.index')->with('info', 'Le film a bien été modifié');
+        if(!$this->permission->isUpdate($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en modification.');
+        }else{
+            $film->update($filmRequest->all());
+            $film->actors()->sync($filmRequest->actors);
+            return redirect()->route('films.index')->with('info', 'Le film a bien été modifié');
+        }
     }
 
     /**
@@ -115,8 +157,13 @@ class FilmController extends Controller
      */
     public function destroy(Film $film)
     {
-        $film->delete();
-        return back()->with('info', 'Le film a bien été mis dans la corbeille.');
+        if(!$this->permission->isDelete($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en supression.');
+        }else{
+            $film->delete();
+            return back()->with('info', 'Le film a bien été mis dans la corbeille.');
+        }
     }
 
     /**
@@ -127,8 +174,13 @@ class FilmController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function forceDestroy($id){
-        Film::withTrashed()->whereId($id)->firstOrFail()->forceDelete();
-        return back()->with('info', 'Le film a bien été supprimé dans la base de données');
+        if(!$this->permission->isAdmin($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les les droits administrateurs.');
+        }else{
+            Film::withTrashed()->whereId($id)->firstOrFail()->forceDelete();
+            return back()->with('info', 'Le film a bien été supprimé dans la base de données');
+        }
     }
 
     /**
@@ -140,7 +192,12 @@ class FilmController extends Controller
      */
     public function restore($id)
     {
-        Film::withTrashed()->whereId($id)->firstOrFail()->restore();
-        return back()->with('info', 'Le film a bien été restauré.');
+        if(!$this->permission->isAdmin($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les droits administrateurs.');
+        }else{
+            Film::withTrashed()->whereId($id)->firstOrFail()->restore();
+            return back()->with('info', 'Le film a bien été restauré.');
+        }
     }
 }
