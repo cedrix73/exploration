@@ -21,21 +21,7 @@
 </div>
 @endif
     <div class="card">
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/') }}">Portail</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-        </div>
         <header class="card-header" justify-content="flex-start">
             <p class="card-header-title">Films {{ $slug }}</p>
             <div class="select">
@@ -78,6 +64,9 @@
                     </thead>
                     <tbody>
                         @foreach($films as $film)
+                            @php
+                            $loopNumber = $loop->iteration;
+                            @endphp
                             <tr @if($film->deleted_at) class="has-background-grey-lighter" @endif>
                                 <td><strong>{{ $film->title }}</strong></td>
                                 <td>
@@ -88,14 +77,14 @@
                                         <button class="button is-primary" type="submit">Restaurer</button>
                                     </form>
                                 @else
-                                    <a class="button is-primary" href="{{ route('films.show', $film) }}">Voir</a>
+                                    <a id="show_{{$loopNumber}}" class="button is-primary" href="{{ route('films.show', $film) }}">Voir</a>
                                 @endif
                                 </td>
                                 @reserved('films-section: isUpdate')
                                 <td>
                                     @if($film->deleted_at)
                                     @else
-                                        <a class="button is-warning" href="{{ route('films.edit', $film) }}">Modifier</a>
+                                <a class="button is-warning" href="{{ route('films.edit', $film) }}" id="update_{{$loopNumber}}">Modifier</a>
                                     @endif
                                 </td>
                                 @endreserved
@@ -104,7 +93,7 @@
                                     <form action="{{ route($film->deleted_at?'films.force.destroy' : 'films.destroy', $film->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="button is-danger" type="submit">Supprimer</button>
+                                        <button id="delete_{{$loopNumber}} class="button is-danger" type="submit">Supprimer</button>
                                     </form>
                                 </td>
                                 @endreserved
