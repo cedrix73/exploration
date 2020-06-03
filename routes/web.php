@@ -119,7 +119,7 @@ Route::get('test', function () {
 })->name('test');
 
 Route::get('{n}', function($n=1) {
-    return 'Je suis la page ' . $n;
+    return 'Je suis la page ' . $n . ', page ' . $_SERVER['PHP_SELF'] . ' !';
 })->where('n', '[1-3]');
 
 Auth::routes();
@@ -127,12 +127,3 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::get('/clear-cache', function() {
-    Artisan::call('cache:clear');
-    return "Cache is cleared";
-})->name('clearcache');
-
-Route::get('/view-clear', function() {
-    $exitCode = Artisan::call('view:clear');
-    return view('welcome');
-})->name('clearview');

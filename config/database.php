@@ -144,18 +144,4 @@ return [
 
     ],
 
-     /*
-    |--------------------------------------------------------------------------
-    | Dusk Testing Database (SQLITE)
-    |--------------------------------------------------------------------------
-    |
-    | Dusk will use a SQLite file for testing, located in the Database folder
-    | and pointed by the .env.dusk.local environment file.
-    */
-    'dusk' => [
-        'driver' => 'sqlite',
-        'database' => database_path('dusk.sqlite'),
-        'prefix' => '',
-    ],
-
 ];

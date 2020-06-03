@@ -57,7 +57,9 @@ class LoginController extends Controller
     protected function authenticated(Request $request, User $user)
     {
         $user->setRolesAndPermissionSession();
-        return redirect()->route('clearview');
+        // $code=$this->permission->check('films-section');
+        // dd($this->permission->isInsert());
+
     }
 
 

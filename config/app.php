@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'local'),
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://exploration.test:8000/'),
+    'url' => env('APP_URL', 'http://localhost/exploration'),
 
     'asset_url' => env('ASSET_URL', null),
 

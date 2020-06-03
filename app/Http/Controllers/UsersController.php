@@ -13,9 +13,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        $input = $request->getMethod();
-        $nomuser=$request->input('nom');
-        return view('retournomuser', compact('nomuser'));
+        return 'Le nom est : ' . $request->input('nom');
     }
 
 
