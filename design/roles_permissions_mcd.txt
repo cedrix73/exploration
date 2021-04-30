@@ -1,0 +1,92 @@
+Ce dossier accueille des modèles conceptuels de traitements (MCT) élaborés avec diagramms.nets
+Ils concernent mon propre système de codification des rôles et des permissions, qui bientôt disponibles dans un package à part:
+
+database\migrations\2020_04_10_140224_create_permissions_table.php
+database\migrations\2020_04_10_135223_create_roles_table.php
+database\seeds\UserRoleSeeder.php
+app\Repositories\Permission
+app\Traits\HasRolesAndPermissions.php
+
+Création du middleWare:
+app\Http\Middleware\RoleMiddleware.php
+class RoleMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $role)
+    {
+        if(auth()->user()==null || !auth()->user()->hasRole($role)) {
+            abort(404);
+            //redirect()->route('accueil');
+        }
+        return $next($request);
+    }
+}
+
+
+
+Implémentation des routes:
+routes\web.php
+
+Route::group(['middleware' => 'role:films-section'], function() {
+    // CRUD corbeille
+    Route::delete('films/force/{id}', 'FilmController@forceDestroy')->name('films.force.destroy');
+    Route::put('films/restore/{id}', 'FilmController@restore')->name('films.restore');
+});
+
+
+Avec des exemples d'implémentation:
+Du back:
+app\Http\Controllers\FilmController.php
+
+use App\Repositories\Permission\PermissionRepositoryInterface;
+
+class FilmController extends Controller
+{
+    private $_roleName;
+    protected $permission;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct(PermissionRepositoryInterface $permission)
+    {
+        $this->_roleName = 'films-section';
+        $this->permission = $permission;
+        $code=$this->permission->check($this->_roleName);
+    }
+
+    public function create()
+    {
+        if(!$this->permission->isInsert($this->_roleName)){
+            return redirect()->route('films.index')
+                ->with('info', 'Vous n\'avez pas les authorisations nécessaires en création.');
+        }else{
+            $categories = Category::all();
+            $actors = Actor::all();
+            return view('film_create', compact('categories', 'actors'));
+        }
+    }
+
+}
+
+
+Du front:
+resources\views\film_index.blade.php
+
+ @reserved('films-section: isUpdate')
+    <th></th>
+    @endreserved
+    @reserved('films-section: isDelete')
+    <th></th>
+    @endreserved
+
+
+
