@@ -1,0 +1,14 @@
+[
+    {
+        "level": "WARNING",
+        "message": "deprecation - HTML Imports is deprecated and will be removed in M80, around February 2020. Please use ES modules instead. See https:\/\/www.chromestatus.com\/features\/5144752345317376 and https:\/\/developers.google.com\/web\/updates\/2019\/07\/web-components-time-to-upgrade for more details.",
+        "source": "deprecation",
+        "timestamp": 1590617591229
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/localhost:8000\/favicon.ico - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1590617598598
+    }
+]
