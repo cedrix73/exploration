@@ -1,0 +1,7 @@
+Ce dossier accueille des modèles conceptuels de traitements (MCT) élaborés avec diagramms.nets
+Ils concernent mon propre système de codification des rôles et des permissions, qui bientôt disponibles dans un package à part:
+
+database\migrations\2020_04_10_140224_create_permissions_table.php
+database\migrations\2020_04_10_135223_create_roles_table.php
+app\Repositories\Permission
+app\Traits\HasRolesAndPermissions.php
